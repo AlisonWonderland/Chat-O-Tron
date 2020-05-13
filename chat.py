@@ -95,9 +95,6 @@ class Chat(object):
         :rtype: str
         """
 
-        str.lower()
-        str = spellcheck(str)
-
         # check each pattern
         for (pattern, response) in self._pairs:
             match = pattern.match(str)
@@ -107,9 +104,13 @@ class Chat(object):
                 resp = random.choice(response)  # pick a random response
                 resp = self._wildcards(resp, match)  # process wildcards
 
-                # put this in a funciton
+                # To open a website
                 if(re.match("Sure. Opening .*", resp)):
-                    openWebsite("google")
+                    website = re.search(pattern, str).group(1)
+                    openWebsite(website)
+                # For any input with weather in it
+                if(re.search(pattern, "weather")):
+                    resp = getWeather()
 
                 # fix munged punctuation at the end
                 if resp[-2:] == "?.":
@@ -129,6 +130,11 @@ class Chat(object):
             except EOFError:
                 print(user_input)
             if user_input:
+                 # Make sure is in right format and spell corrected to ensure best results
+                user_input.lower()
+                user_input = spellcheck(user_input)
                 while user_input[-1] in "!.":
                     user_input = user_input[:-1]
                 print(self.respond(user_input))
+                # Bug with website open. Spell corrects website
+                print(sentimentAnalysis(user_input), end='')

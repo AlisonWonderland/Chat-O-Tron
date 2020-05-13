@@ -4,9 +4,25 @@ from nltk.chat.util import reflections
 import pyfiglet
 
 pairs = [
+    # [
+    #     r"can you open (.*)\.com",
+    #     ["Sure. Opening %1.com",]
+    # ],
     [
         r"can you open (.*)",
-        ["Sure. Opening %1",]
+        ["Sure. Opening %1.com",]
+    ],
+    [
+        r"what's the weather (.*)",
+        ["",]
+    ],
+    [
+        r"weather(.*)",
+        ["",]
+    ],
+    [
+        r"tron: (.*)",
+        ["",]
     ],
     [
         r"my name is (.*)",
