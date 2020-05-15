@@ -1,6 +1,8 @@
 import webbrowser
 import socket
 import requests
+import random
+import config
 from spellchecker import SpellChecker
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
@@ -20,13 +22,25 @@ def getWeather():
     geo_request = requests.get(geo_request_url)
     geo_data = geo_request.json()
 
-    weather_request = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={geo_data["latitude"]}&lon={geo_data["longitude"]}&units=imperial&appid=6620fb18917ffa433db64ebf83cde131').json()
+    weather_request = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={geo_data["latitude"]}&lon={geo_data["longitude"]}&units=imperial&appid={config.weather_api_key}').json()
     city = weather_request["name"]
-    maxTemp = weather_request["main"]["temp_max"]
-    weatherDescription = weather_request["weather"][0]["description"]
-    response = "In " + city + " the high is " + str(maxTemp) + " degrees. With " + weatherDescription + "."
+    max_temp = weather_request["main"]["temp_max"]
+    weather_description = weather_request["weather"][0]["description"]
+    response = "In " + city + " the high is " + str(max_temp) + " degrees. With " + weather_description + "."
     return response
+
+def getNews():
+    news_request = requests.get(f'https://newsapi.org/v2/top-headlines?country=us&apiKey={config.news_api_key}').json()
+    num_articles = len(news_request["articles"])
     
+    article_num = random.randint(0, num_articles - 1)
+    article = news_request["articles"][article_num]
+    
+    print("Talking about the news huh. Here have some news.")
+    print("Title:", article["title"])
+    print("CONTENT:")
+    print(article["content"])
+
 
 def spellcheck(str):
     spell = SpellChecker()

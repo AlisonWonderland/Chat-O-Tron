@@ -109,8 +109,11 @@ class Chat(object):
                     website = re.search(pattern, str).group(1)
                     openWebsite(website)
                 # For any input with weather in it
-                if(re.search(pattern, "weather")):
+                if(re.match(r".*weather.*", str)):
                     resp = getWeather()
+
+                if(re.match(r".*news.*", str)):
+                    getNews()
 
                 # fix munged punctuation at the end
                 if resp[-2:] == "?.":
@@ -118,6 +121,8 @@ class Chat(object):
                 if resp[-2:] == "??":
                     resp = resp[:-2] + "?"
                 return resp
+
+        return "Hmm, I don't know what to say"
 
 
     # Hold a conversation with a chatbot
